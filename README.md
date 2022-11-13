@@ -203,6 +203,21 @@ makeinstall_target() {
   install -Dm755 $PKG_DIR/ampart $INSTALL/usr/sbin/ampart
 }
 ```
+# Inclusion in other projects / 包含在其他项目中
+
+You're free to include ampart in your project as long as it meets [the license][license]. The [Makefile] and the above `package.mk` is a good starting point if you're gonna include `ampart` in your project. You're recommended to build it from source rather than downloading the binary release  
+你可以自由地把ampart引入到你的项目中，只要它符合[授权许可][license]。[Makefile]和上面的`package.mk`可以当作把`ampart`加入你项目的参考。建议你从源码构建，而不是下载二进制发布
+ 
+But if you're gonna do it, do it in the proper way: handling the ampart's stdout to utilize its CLI **with a script**, shell or Python they're all fine, **don't use another stupid C program and possibly system() to wrap it around**, because **ampart was specially written to provide a stable CLI but not C API**.  
+但你要是做的话就用正确的方式去做：用脚本通过ampart的命令行界面处理它的标准输出，shell或者是Python都可以，**别用另一个傻了吧唧的C程序用system()来调用**，因为**ampart是特别提供稳定的命令行界面但不保证稳定的C API**
+
+And let's make it clear, it's stupid enough to use `system()` to use C as script, but I can accept it even I don't use any in my program. **But** the stupidity is out of my understanding **if you're using system() and piping inside it**. The following decompiled function in *the-tool-that-should-not-be-named* just blew my mind: Effectively this is just hiding a script as a black box binary just so users could find your magical binary admirable. **Don't even mention ampart in your project if you're doing so, you will make me shame on your whole team**  
+而且咱们整明白了，用`system()`来把C当脚本用已经够蠢了，不过尽管我不会这么做但我还能接受。**但是你要是用`system()`还在里面用管道的话**，愚蠢程度我无法接受。下面这个从*那个C什么E什么名字不能提的项目*里的脚本反编译出来的函数给我整麻了：本质上这就是把个脚本当成他妈的黑盒二进制然后用户觉得你的魔幻的二进制牛逼的三脚猫伎俩。**你要是这么做，别在你的项目里提ampart，我为你们整个团队感到羞耻**
+
+ ![laughable-system-call](./imgs/laughable_system_call.png)
+ ![pro-scripting](./imgs/the-pro-way-of-scripting.jpg)
+
+
 
 # License / 授权许可
 **ampart**(Amlogic emmc partition tool) is licensed under [**GPL3**](https://gnu.org/licenses/gpl.html)
@@ -213,6 +228,7 @@ makeinstall_target() {
 
  * You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+[license]: #license--授权许可
 
 [doc]: doc
 [scripts]: scripts/aminstall
@@ -225,6 +241,7 @@ makeinstall_target() {
 [EmuELEC]:https://github.com/EmuELEC/EmuELEC
 [HybridELEC]:https://github.com/7Ji/HybridELEC
 [LibreELEC]:https://github.com/LibreELEC/LibreELEC.tv
+[Makefile]:Makefile
 [OpenWrt]:https://github.com/ophub/amlogic-s9xxx-openwrt
 [ampart-git]:https://aur.archlinux.org/packages/ampart-git
 [soon™]:https://discourse.coreelec.org/t/does-odroid-n2-still-worth/19585/13
